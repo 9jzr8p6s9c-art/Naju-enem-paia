@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<meta name="theme-color" content="#ffd6e7" />
+<title>Oi, Naju</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%B8%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Quicksand', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: linear-gradient(160deg, #ffeaf3 0%, #ffd7e9 45%, #ffc4de 100%);
+    color: #5f3550;
+    display: flex;
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding: 20px;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- jardim de flores do fundo ---------- */
+  #jardim {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .flor {
+    position: absolute;
+    user-select: none;
+    -webkit-user-select: none;
+    animation-name: flutuar;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    will-change: transform;
+    filter: saturate(1.05);
+  }
+
+  @keyframes flutuar {
+    from { transform: translateY(-9px) rotate(-12deg); }
+    to   { transform: translateY(9px)  rotate(12deg); }
+  }
+
+  /* ---------- cartão ---------- */
+  .cartao {
+    position: relative;
+    z-index: 2;
+    margin: auto;
+    width: min(430px, 100%);
+    background: rgba(255, 250, 253, 0.93);
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 34px;
+    padding: 38px 26px 34px;
+    text-align: center;
+    box-shadow:
+      0 20px 50px rgba(214, 79, 133, 0.18),
+      0 4px 12px rgba(214, 79, 133, 0.08);
+  }
+
+  /* ---------- telas ---------- */
+  .tela { display: none; }
+  .tela.ativa { display: block; animation: entrar 0.45s ease; }
+
+  @keyframes entrar {
+    from { opacity: 0; transform: translateY(14px) scale(0.98); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  h1 {
+    margin: 0 0 12px;
+    font-size: 1.55rem;
+    line-height: 1.3;
+    font-weight: 700;
+    color: #e04a86;
+    letter-spacing: -0.2px;
+  }
+
+  p {
+    margin: 0 0 14px;
+    font-size: 1.02rem;
+    line-height: 1.55;
+    color: #7a4a63;
+  }
+
+  p:last-child { margin-bottom: 0; }
+
+  .sub { margin-bottom: 22px; }
+
+  /* ---------- botões ---------- */
+  .btn {
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 15px 28px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ff8fb8, #ff5f9e);
+    box-shadow: 0 10px 22px rgba(255, 95, 158, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    max-width: 100%;
+    line-height: 1.25;
+  }
+
+  .btn:active {
+    transform: scale(0.96);
+    box-shadow: 0 6px 14px rgba(255, 95, 158, 0.3);
+  }
+
+  .slot {
+    min-height: 58px;
+    display: grid;
+    place-items: center;
+  }
+
+  .dica {
+    min-height: 1.5em;
+    margin: 10px 0 0;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: #c76a94;
+  }
+
+  /* botão que foge */
+  .btn.fugindo {
+    position: fixed;
+    z-index: 999;
+    margin: 0;
+    transition:
+      left 0.32s cubic-bezier(0.34, 1.3, 0.64, 1),
+      top  0.32s cubic-bezier(0.34, 1.3, 0.64, 1);
+  }
+
+  /* botão "deslocado" da tela 3 */
+  .deslocado {
+    margin-top: 78px;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 6px;
+  }
+
+  /* ---------- mensagem final ---------- */
+  .texto-final {
+    animation: aparecer 0.8s ease 0.55s both;
+    text-align: left;
+  }
+
+  @keyframes aparecer {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  .destaque {
+    margin-top: 18px;
+    text-align: center;
+    font-weight: 700;
+    color: #d6336c;
+    font-size: 1.05rem;
+  }
+</style>
+</head>
+<body>
+
+  <div id="jardim" aria-hidden="true"></div>
+
+  <main class="cartao">
+
+    <!-- TELA 1 -->
+    <section class="tela ativa" id="tela1">
+      <h1>Oi, Naju, tudo bem?</h1>
+      <p class="sub">Tenho uma coisa pra te mostrar</p>
+      <div class="slot">
+        <button class="btn" id="btnFujao" type="button">Clica aqui</button>
+      </div>
+      <p class="dica" id="dica"></p>
+    </section>
+
+    <!-- TELA 2 -->
+    <section class="tela" id="tela2">
+      <h1>Não, espera...</h1>
+      <p class="sub">Acho que não era bem aqui, kkkkk</p>
+      <button class="btn" id="btnTentar" type="button">Tentar novamente</button>
+    </section>
+
+    <!-- TELA 3 -->
+    <section class="tela" id="tela3">
+      <h1>Agora vai, confia em mim</h1>
+      <p class="sub">Dessa vez é sério, juro.</p>
+      <div class="deslocado">
+        <button class="btn" id="btnPronto" type="button">Pronto, agora sem brincadeira</button>
+      </div>
+    </section>
+
+    <!-- TELA 4 -->
+    <section class="tela" id="tela4">
+      <h1>Finalmente!</h1>
+      <div class="texto-final">
+        <p>Agora falando sério: espero que tenha dado tudo certo no Enem.</p>
+        <p>Saiba que fiquei aqui torcendo por você. Queria encontrar um jeito diferente de te desejar coisas boas, então resolvi fazer isso aqui.</p>
+        <p>Espero que tenha gostado kkkkk.</p>
+        <p class="destaque">Você merece muitas coisas boas e um coraçãozinho.</p>
+      </div>
+    </section>
+
+  </main>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- florezinhas de fundo ---------- */
+  var jardim = document.getElementById('jardim');
+  var EMOJIS = ['🌸', '🌷', '🌺', '🌼', '💮', '🌻', '🪷', '🌸', '🌷'];
+
+  for (var i = 0; i < 22; i++) {
+    var f = document.createElement('span');
+    f.className = 'flor';
+    f.textContent = EMOJIS[Math.floor(Math.random() * EMOJIS.length)];
+    f.style.left = (Math.random() * 96) + '%';
+    f.style.top = (Math.random() * 96) + '%';
+    f.style.fontSize = (14 + Math.random() * 24).toFixed(0) + 'px';
+    f.style.opacity = (0.22 + Math.random() * 0.33).toFixed(2);
+    f.style.animationDelay = (-Math.random() * 8).toFixed(2) + 's';
+    f.style.animationDuration = (5 + Math.random() * 5).toFixed(2) + 's';
+    jardim.appendChild(f);
+  }
+
+  /* ---------- navegação entre telas ---------- */
+  var telas = {
+    1: document.getElementById('tela1'),
+    2: document.getElementById('tela2'),
+    3: document.getElementById('tela3'),
+    4: document.getElementById('tela4')
+  };
+
+  function irPara(n) {
+    Object.keys(telas).forEach(function (k) {
+      telas[k].classList.remove('ativa');
+    });
+    telas[n].classList.add('ativa');
+    window.scrollTo(0, 0);
+  }
+
+  /* ---------- botão fugitivo ---------- */
+  var btnFujao = document.getElementById('btnFujao');
+  var dica = document.getElementById('dica');
+  var provocacoes = ['ué', 'ei, ele tá fugindo kkkkk'];
+  var fugas = 0;
+
+  function fugir() {
+    var rect = btnFujao.getBoundingClientRect();
+
+    if (!btnFujao.classList.contains('fugindo')) {
+      btnFujao.classList.add('fugindo');
+      btnFujao.style.left = rect.left + 'px';
+      btnFujao.style.top = rect.top + 'px';
+      void btnFujao.offsetWidth;
+    }
+
+    var pad = 10;
+    var w = btnFujao.offsetWidth;
+    var h = btnFujao.offsetHeight;
+    var maxX = Math.max(pad, window.innerWidth - w - pad);
+    var maxY = Math.max(pad, window.innerHeight - h - pad);
+
+    var x = pad, y = pad, tentativas = 0;
+    do {
+      x = pad + Math.random() * (maxX - pad);
+      y = pad + Math.random() * (maxY - pad);
+      tentativas++;
+    } while (
+      Math.abs(x - rect.left) < 90 &&
+      Math.abs(y - rect.top) < 90 &&
+      tentativas < 12
+    );
+
+    btnFujao.style.left = x + 'px';
+    btnFujao.style.top = y + 'px';
+  }
+
+  btnFujao.addEventListener('click', function (e) {
+    e.preventDefault();
+    if (fugas >= 3) return;
+
+    fugas++;
+    fugir();
+
+    if (fugas < 3) {
+      dica.textContent = provocacoes[fugas - 1] || '';
+    } else {
+      dica.textContent = '';
+      btnFujao.style.pointerEvents = 'none';
+      setTimeout(function () { irPara(2); }, 850);
+    }
+  });
+
+  /* ---------- resto do fluxo ---------- */
+  document.getElementById('btnTentar').addEventListener('click', function () {
+    irPara(3);
+  });
+
+  document.getElementById('btnPronto').addEventListener('click', function () {
+    irPara(4);
+  });
+
+})();
+</script>
+</body>
+</html>
